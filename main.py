@@ -1,7 +1,15 @@
 from flask import Flask, request, jsonify
+
+
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 import sqlite3
 
 app = Flask(__name__)
+limiter = Limiter(key_func=get_remote_address)
+limiter.init_app(app)
+
 
 def db_connection():
     conn = sqlite3.connect('todo.sqlite')
@@ -10,6 +18,7 @@ def db_connection():
 
 
 @app.route('/view', methods=["GET","POST"])
+@limiter.limit("10 per minute")
 def get_data():
     conn = db_connection()
     cursor = conn.cursor()
@@ -38,6 +47,7 @@ def get_data():
         return f"Todo with the id: {cursor.lastrowid} created successfully", 201
 
 @app.route('/edit/<int:id>', methods=["GET","PUT","DELETE"])
+@limiter.limit("10 per minute")
 def update_todo(id):
     conn = db_connection()
     cursor = conn.cursor()
