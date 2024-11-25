@@ -30,3 +30,6 @@ Info on how to run:
         4) for deleteing the notes:
             use DELETE method from postman and use this link to delete the specif file with its id             
             http://127.0.0.1:5000/edit/id
+
+Commetns form this bearded ass guy;
+    
