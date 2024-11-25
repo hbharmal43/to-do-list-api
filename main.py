@@ -5,6 +5,8 @@ import random
 app = Flask(__name__)
 limiter = Limiter(key_func=get_remote_address)
 limiter.init_app(app)
+
+app.config['SECRET_KEY'] = '_QkO3BwHfth7N1hz'
 #Declare a todo item class. The class should have its properties and methods as required.
 class Todo:
     def __init__(self,id:int, title: str,description: str,priority: int,status: bool) -> None:
@@ -35,7 +37,18 @@ keys_list = list(todo_list.keys())
 @app.route("/todos",methods = ["GET"])
 @limiter.limit("10 per minute")
 def get_data():
-    return jsonify([todos.in_dict() for todos in todo_list.values()])
+    completed_list = []
+    pending_list = []
+    for todos in todo_list.values():
+            if todos.status == False:
+                pending_list.append(todos.in_dict())
+            else:
+                completed_list.append(todos.in_dict())
+                
+    return jsonify({
+        "Incomplete todos" : pending_list, 
+        "complete To-Dos" : completed_list
+    })
 
 # Create a GET /todos/<id> endpoint to retrieve a todo with specific id
 @app.route("/todos/<id>",methods = ["GET"])

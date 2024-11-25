@@ -1,0 +1,4 @@
+✅ An endpoint to add a new to-do item with attributes such as title, description, and priority.
+✅ An endpoint to mark a to-do item as completed.
+✅ An endpoint to delete a to-do item.
+✅ An endpoint to list all to-do items, showing completed and pending items separately.
